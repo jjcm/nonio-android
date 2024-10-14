@@ -1,0 +1,140 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
+}
+
+android {
+    namespace 'com.nonio.android'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.nonio.android"
+        minSdk 24
+        targetSdk 34
+        versionCode 2
+        versionName "1.0.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(KEY_STORE_FILE_638)
+            storePassword KEY_STORE_PASSWORD_OS
+            keyAlias KEY_ALIAS_OS
+            keyPassword KEY_PASSWORD_OS
+        }
+
+        debug {
+            storeFile file(KEY_STORE_FILE_638)
+            storePassword KEY_STORE_PASSWORD_OS
+            keyAlias KEY_ALIAS_OS
+            keyPassword KEY_PASSWORD_OS
+        }
+    }
+
+    android.applicationVariants.configureEach {
+        variant ->
+            variant.outputs.configureEach {
+                outputFileName = "nonio-${variant.versionName}.apk"
+            }
+    }
+
+
+    buildTypes {
+
+        debug {
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.3'
+    }
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.ui
+    implementation libs.androidx.ui.graphics
+    implementation libs.androidx.ui.tooling.preview
+    implementation libs.androidx.material3
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.monitor
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation libs.androidx.ui.test.junit4
+    debugImplementation libs.androidx.ui.tooling
+    debugImplementation libs.androidx.ui.test.manifest
+    //log
+    implementation libs.timber
+    //network
+    implementation libs.retrofit
+    implementation libs.retrofit.moshi
+    implementation libs.retrofit.scalars
+
+
+
+    //json moshi
+    ksp libs.moshi.kotlin.codegen
+    implementation libs.moshi.kotlin
+
+    //coil image loader
+    implementation libs.coil.kt.coil
+    implementation libs.coil.compose
+
+   // implementation(libs.com.slack.eithernet.eithernet)
+    //video exoplayer
+
+    implementation libs.androidx.media3.exoplayer // [Required] androidx.media3 ExoPlayer dependency
+    implementation libs.androidx.media3.session // [Required] MediaSession Extension dependency
+    implementation libs.androidx.media3.ui // [Required] Base Player UI
+
+
+    implementation libs.logging.interceptor
+
+    //paging
+    implementation libs.androidx.paging.runtime
+    implementation libs.androidx.paging.compose
+    
+    implementation("androidx.compose.material3:material3:1.3.0-beta04")
+
+    //web
+    implementation "com.google.accompanist:accompanist-webview:0.35.0-alpha"
+
+    testImplementation 'org.json:json:20240303'
+}
